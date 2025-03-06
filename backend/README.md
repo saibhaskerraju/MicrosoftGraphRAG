@@ -1,7 +1,3 @@
-# MicrosoftGraphRAG
-First GraphRAG using Azure Cloud Services
-
-
 ### uv commands
 
 #### activate environment

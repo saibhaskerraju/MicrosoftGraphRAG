@@ -1,0 +1,19 @@
+{
+	"name": "fastapi-uv",
+	"dockerComposeFile": ["../compose-backend-dev.yml"],
+	"service": "fastapi",
+	"shutdownAction": "stopCompose",
+	"workspaceFolder": "/workspace/backend",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python"
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/python:1": {}
+	},
+	"postStartCommand": "uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
+
+}

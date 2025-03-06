@@ -1,0 +1,8 @@
+services:
+  fastapi:
+    build:
+      target: builder
+      context: backend/.
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity
