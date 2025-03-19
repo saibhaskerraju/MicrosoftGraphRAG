@@ -5,4 +5,6 @@ services:
       context: backend/.
     volumes:
       - .:/workspace:cached
+    env_file:
+      - backend/.env.local
     command: sleep infinity

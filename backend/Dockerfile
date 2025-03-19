@@ -19,4 +19,5 @@ COPY --from=builder /app /app
 
 WORKDIR /app
 
-CMD ["/app/.venv/bin/fastapi", "run", "app/main.py", "--port", "80"]
+ENTRYPOINT ["/app/.venv/bin/uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]
+#CMD ["sh", "-c", "pwd && ls -la &&  ls -la .venv/bin && tail -f /dev/null"]

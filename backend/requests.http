@@ -1,0 +1,5 @@
+### Get server status
+GET http://127.0.0.1:8000/
+
+### Get documentation
+GET http://127.0.0.1:8000/docs
