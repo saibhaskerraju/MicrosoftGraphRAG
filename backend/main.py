@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 import os
 import fitz
-import uvicorn
+# import uvicorn
 
 
 app = FastAPI()
@@ -27,5 +27,5 @@ async def root():
     return {"pdf_text": pdf_text}
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, server_headers=False)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8000, server_headers=False)
