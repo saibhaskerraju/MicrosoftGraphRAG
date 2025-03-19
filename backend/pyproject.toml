@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard]>=0.115.11",
-    "neo4j>=5.28.1",
-    "pymupdf>=1.25.3",
+    "neo4j-graphrag>=1.6.0",
     "ruff>=0.9.9",
 ]
