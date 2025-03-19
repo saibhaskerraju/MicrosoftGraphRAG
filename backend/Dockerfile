@@ -14,8 +14,11 @@ RUN uv sync --frozen --no-cache
 # Stage 2: Runtime
 FROM python:3.12-slim AS runtime
 
+ENV VIRTUAL_ENV=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
 # Copy only the necessary files from the builder stage
-COPY --from=builder /app /app
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 WORKDIR /app
 
