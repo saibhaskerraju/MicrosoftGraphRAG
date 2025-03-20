@@ -26,7 +26,7 @@ COPY *.py ./
 COPY sample.pdf ./sample.pdf
 
 WORKDIR /app
-
-CMD ["/app/.venv/bin/fastapi", "run", "main.py", "--port", "8080", "--host", "0.0.0.0"]
-#ENTRYPOINT ["/app/.venv/bin/uvicorn", "main:app", "--host=0.0.0.0", "--port=8080"]
+EXPOSE 8080
+ENTRYPOINT ["/app/.venv/bin/fastapi", "run", "main.py", "--port", "8080", "--host", "0.0.0.0"]
+#ENTRYPOINT ["/app/.venv/bin/uvicorn", "main:app", "--port=8080", "--host=0.0.0.0"]
 #CMD ["sh", "-c", "pwd && ls -la &&  ls -la .venv/bin && tail -f /dev/null"]

@@ -172,6 +172,5 @@ cython_debug/
 
 
 #custom
-backend/.env
 backend/.env.local
 backend/.venv

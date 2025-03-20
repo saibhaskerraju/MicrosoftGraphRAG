@@ -1,6 +1,10 @@
 # MicrosoftGraphRAG
 First GraphRAG using Azure Cloud Services
 
+#### How to run locally
+
+- make sure you have `.env.local` file. replace all valeus from `.env`.
+- run `docker compose up --build` in your terminal.
 
 ### uv commands
 

@@ -2,3 +2,5 @@
 .ruff_cache
 Dockerfile
 .dockerignore
+.env
+.env.local
