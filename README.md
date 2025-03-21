@@ -1,5 +1,5 @@
 # MicrosoftGraphRAG
-First GraphRAG using Azure Cloud Services
+First GraphRAG
 
 #### How to run locally
 
