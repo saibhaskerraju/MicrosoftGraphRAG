@@ -1,20 +1,25 @@
 {
-	"name": "fastapi-uv",
-	"dockerComposeFile": ["../compose-backend-dev.yml"],
-	"service": "fastapi",
-	"shutdownAction": "stopCompose",
-	"workspaceFolder": "/workspace/backend",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-python.python",
-				"humao.rest-client"
-			]
-		}
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/python:1": {}
-	},
-	"postStartCommand": "uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
-
+  "name": "fastapi-uv",
+  "dockerComposeFile": ["../compose-backend-dev.yml"],
+  "service": "fastapi",
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/workspace/backend",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "humao.rest-client",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.formatting.provider": "none", // Disable default python formater
+        "editor.formatOnSave": true,
+        "ruff.format.onSave": true // Ruff's own setting for format on save.
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {}
+  },
+  "postStartCommand": "uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
 }
