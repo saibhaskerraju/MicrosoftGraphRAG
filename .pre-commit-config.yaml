@@ -10,7 +10,7 @@ repos:
       # Run the linter.
       - id: ruff
         types_or: [python, pyi]
-        args: ["--fix","--config","pyproject.toml"]
+        args: ["--fix","--config","backend/pyproject.toml"]
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
@@ -18,3 +18,5 @@ repos:
     hooks:
       # Update the uv lockfile
       - id: uv-lock
+        files: backend/uv.lock
+        args: ["--project", "backend/pyproject.toml"]

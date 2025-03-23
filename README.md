@@ -1,10 +1,18 @@
 # MicrosoftGraphRAG
-First GraphRAG
+First GraphRAG using Neo4j
 
-#### How to run locally
+#### How to run locally in PRD mode
 
 - make sure you have `.env.local` file. replace all valeus from `.env`.
 - run `docker compose up --build` in your terminal.
+
+#### How to run in devContainer mode
+
+- open in dev container mode using command pallete `ctrl+shift+p`
+- the `postStartCommand` will take care of initial steps
+- once setup is ready, in your terminal, navigate to `backend` and type
+`source .venv/bin/activate`
+
 
 ### uv commands
 

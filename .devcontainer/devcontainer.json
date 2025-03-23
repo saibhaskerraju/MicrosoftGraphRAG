@@ -29,5 +29,6 @@
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/jungaretti/features/make:1": {}
   },
-  "postStartCommand": "uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
+  // "postStartCommand": "cd backend && uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
+  "postStartCommand": "make install && make venv"
 }
