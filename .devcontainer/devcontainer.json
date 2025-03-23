@@ -3,13 +3,19 @@
   "dockerComposeFile": ["../compose-backend-dev.yml"],
   "service": "fastapi",
   "shutdownAction": "stopCompose",
-  "workspaceFolder": "/workspace/backend",
+  "workspaceFolder": "/workspace",
   "customizations": {
     "vscode": {
       "extensions": [
         "ms-python.python",
         "humao.rest-client",
-        "charliermarsh.ruff"
+        "charliermarsh.ruff",
+        "PKief.material-icon-theme",
+        "njqdev.vscode-python-typehint",
+        "KevinRose.vsc-python-indent",
+        "njpwerner.autodocstring",
+        "LittleFoxTeam.vscode-python-test-adapter",
+        "formulahendry.code-runner"
       ],
       "settings": {
         "python.formatting.provider": "none", // Disable default python formater
@@ -19,7 +25,9 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/python:1": {}
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/jungaretti/features/make:1": {}
   },
   "postStartCommand": "uv sync --frozen --no-cache && chmod +x .venv/bin/activate && .venv/bin/activate"
 }
