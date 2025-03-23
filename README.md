@@ -21,3 +21,12 @@ First GraphRAG
 #### install from lock file only
 
 - `uv sync --frozen --no-cache`
+
+
+#### Notes on Docker Pre-commit
+
+- Tried developing `pre-commit` in docker rather than host system.
+- able to get `staged` file names from `pre-commit` hook.
+- figured out a way to pass to docker compose
+- `pre-commit.yaml` will do the required stuff and finally able to move the files back to org dest using volumes.
+- the problem here is, developers need to stage them again and then commit it and it is a long process.

@@ -1,0 +1,7 @@
+services:
+  fastapi-pre-commit:
+    build:
+      context: backend
+      dockerfile: Dockerfile-PreCommit
+    volumes:
+      - ./backend:/main
