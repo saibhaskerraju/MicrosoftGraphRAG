@@ -25,7 +25,9 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY *.py ./
 COPY sample.pdf ./sample.pdf
 
-WORKDIR /app
+RUN python -m spacy download en_core_web_sm --target /app
+
+# WORKDIR /app
 EXPOSE 8080
 ENTRYPOINT ["/app/.venv/bin/fastapi", "run", "main.py", "--port", "8080", "--host", "0.0.0.0"]
 #ENTRYPOINT ["/app/.venv/bin/uvicorn", "main:app", "--port=8080", "--host=0.0.0.0"]

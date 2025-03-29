@@ -6,21 +6,21 @@ services:
       - backend/.env.local
     ports:
       - "8080:8080"
-    depends_on:
-      - neo4j
-  neo4j:
-    image: neo4j:latest
-    volumes:
-        - ~/neo4j/logs:/logs
-        - ~/neo4j/config:/config
-        - ~/neo4j/data:/data
-        - ~/neo4j/plugins:/plugins
-    environment:
-        - NEO4J_apoc_export_file_enabled=true
-        - NEO4J_apoc_import_file_enabled=true
-        - NEO4J_apoc_import_file_use__neo4j__config=true
-        - NEO4JLABS_PLUGINS=["apoc"]
-    ports:
-      - "7474:7474"
-      - "7687:7687"
-    restart: always
+  #   depends_on:
+  #     - neo4j
+  # neo4j:
+  #   image: neo4j:latest
+  #   volumes:
+  #       - ~/neo4j/logs:/logs
+  #       - ~/neo4j/config:/config
+  #       - ~/neo4j/data:/data
+  #       - ~/neo4j/plugins:/plugins
+  #   environment:
+  #       - NEO4J_apoc_export_file_enabled=true
+  #       - NEO4J_apoc_import_file_enabled=true
+  #       - NEO4J_apoc_import_file_use__neo4j__config=true
+  #       - NEO4JLABS_PLUGINS=["apoc"]
+  #   ports:
+  #     - "7474:7474"
+  #     - "7687:7687"
+  #   restart: always

@@ -8,7 +8,11 @@ from neo4j_graphrag.retrievers import VectorRetriever
 from neo4j_graphrag.indexes import create_vector_index
 from neo4j_graphrag.generation.graphrag import GraphRAG
 from fastapi.middleware.cors import CORSMiddleware
+import fitz
+import spacy
 
+
+nlp = spacy.load("en_core_web_sm")
 
 app = FastAPI()
 app.add_middleware(
@@ -39,17 +43,26 @@ embedder = Embeddings(
 )
 
 
-# def extract_text_from_pdf(pdf_path):
-#      # Open the PDF file
-#      pdf_document = fitz.open(pdf_path)
+def extract_text_from_pdf(pdf_path):
+	# Open the PDF file
+	pdf_document = fitz.open(pdf_path)
+	text = ""
+	# Iterate through each page
+	for page_number in range(len(pdf_document)):
+		page = pdf_document.load_page(page_number)
+		text += page.get_text()
 
-#       text = ""
-#        # Iterate through each page
-#        for page_number in range(len(pdf_document)):
-#             page = pdf_document.load_page(page_number)
-#             text += page.get_text()
+	return text
 
-#         return text
+
+@app.get("/spacy")
+async def pdf():
+	pdf_path = "sample.pdf"
+	pdf_text = extract_text_from_pdf(pdf_path)
+	doc = nlp(pdf_text)
+	entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
+	pos_tags = [{"text": token.text, "pos": token.pos_} for token in doc]
+	return {"entities": entities, "pos_tags": pos_tags}
 
 
 @app.get("/")
