@@ -10,9 +10,23 @@ from neo4j_graphrag.generation.graphrag import GraphRAG
 from fastapi.middleware.cors import CORSMiddleware
 import fitz
 import spacy
-
+from azure.ai.textanalytics import TextAnalyticsClient
+from azure.core.credentials import AzureKeyCredential
 
 nlp = spacy.load("en_core_web_sm")
+
+
+# Authenticate the client using your key and endpoint
+def authenticate_client():
+	ta_credential = AzureKeyCredential(config.AZURE_LANGUAGE_KEY)
+	text_analytics_client = TextAnalyticsClient(
+		endpoint=config.AZURE_LANGUAGE_ENDPOINT, credential=ta_credential
+	)
+	return text_analytics_client
+
+
+client = authenticate_client()
+
 
 app = FastAPI()
 app.add_middleware(
@@ -23,7 +37,8 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 neo4j_driver = neo4j.GraphDatabase.driver(
-	config.NEO4J_URI, auth=(config.NEO4J_USER, config.NEO4J_PASSWORD)
+	config.NEO4J_URI
+	# , auth=(config.NEO4J_USER, config.NEO4J_PASSWORD)
 )
 
 llm = LLM(
@@ -43,6 +58,29 @@ embedder = Embeddings(
 )
 
 
+def create_entity(entity_text, entity_category):
+	with neo4j_driver.session() as session:
+		session.run(
+			"MERGE (e:Entity {text: $text, category: $category})",
+			text=entity_text,
+			category=entity_category,
+		)
+
+
+def create_relationship(entity1_text, entity2_text, relationship):
+	with neo4j_driver.session() as session:
+		session.run(
+			"""
+            MATCH (e1:Entity {text: $entity1_text})
+            MATCH (e2:Entity {text: $entity2_text})
+            MERGE (e1)-[:RELATIONSHIP {type: $relationship}]->(e2)
+            """,
+			entity1_text=entity1_text,
+			entity2_text=entity2_text,
+			relationship=relationship,
+		)
+
+
 def extract_text_from_pdf(pdf_path):
 	# Open the PDF file
 	pdf_document = fitz.open(pdf_path)
@@ -55,6 +93,26 @@ def extract_text_from_pdf(pdf_path):
 	return text
 
 
+@app.get("/azure")
+async def entities():
+	pdf_path = "sample.pdf"
+	pdf_text = extract_text_from_pdf(pdf_path)
+	response = client.recognize_entities([pdf_text])
+	for doc in response:
+		if not doc.is_error:
+			entities = doc.entities
+			for entity in entities:
+				create_entity(entity.text, entity.category)
+
+			if len(entities) > 1:
+				for i in range(len(entities) - 1):
+					create_relationship(
+						entities[i].text, entities[i + 1].text, "RELATED_TO"
+					)
+
+	return {"message": "Entities and relationships created in Neo4j."}
+
+
 @app.get("/spacy")
 async def pdf():
 	pdf_path = "sample.pdf"
@@ -65,13 +123,15 @@ async def pdf():
 	return {"entities": entities, "pos_tags": pos_tags}
 
 
+@app.get("/test")
+async def test():
+	response = await llm.ainvoke("Hello asdsad")
+	responsetwo = embedder.embed_query("Hello asdsad")
+	return {"response": response, "responsetwo": responsetwo}
+
+
 @app.get("/")
 async def root():
-	# pdf_path = "sample.pdf"
-	# pdf_text = extract_text_from_pdf(pdf_path)
-	# response = await ex_llm.ainvoke("Hello asdsad")
-	# responsetwo = embedder.embed_query("Hello asdsad")
-
 	# 1. Build KG and Store in Neo4j Database
 	kg_builder_pdf = SimpleKGPipeline(
 		llm=llm,
