@@ -4,6 +4,8 @@ import neo4j
 from neo4j_graphrag.llm import OpenAILLM as LLM
 from neo4j_graphrag.embeddings.openai import OpenAIEmbeddings as Embeddings
 from neo4j_graphrag.experimental.pipeline.kg_builder import SimpleKGPipeline
+
+# from neo4j_graphrag.experimental.components.pdf_loader import DataLoader
 from neo4j_graphrag.retrievers import VectorRetriever
 from neo4j_graphrag.indexes import create_vector_index
 from neo4j_graphrag.generation.graphrag import GraphRAG
@@ -12,6 +14,7 @@ import fitz
 import spacy
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
+from customloader import PyMuPdfLoader
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -129,6 +132,7 @@ async def test():
 	responsetwo = embedder.embed_query("Hello asdsad")
 	return {"response": response, "responsetwo": responsetwo}
 
+
 @app.get("/run")
 async def run():
 	create_vector_index(
@@ -148,7 +152,9 @@ async def run():
 	rag = GraphRAG(llm=llm, retriever=vector_retriever)
 
 	# 4. Run
-	response = rag.search("give me details on paypal financial domain. a brief overview")
+	response = rag.search(
+		"give me details on paypal financial domain. a brief overview"
+	)
 	print(response.answer)
 	return {"response": response.answer}
 
@@ -160,13 +166,12 @@ async def root():
 		llm=llm,
 		driver=neo4j_driver,
 		embedder=embedder,
+		pdf_loader=PyMuPdfLoader(),
 		from_pdf=True,
 	)
-	await kg_builder_pdf.run_async(file_path="sampletwo.pdf")
-	
+	await kg_builder_pdf.run_async(file_path="sample.pdf")
 
 	return {"response": "Data inserted into Neo4j"}
-
 
 
 # if __name__ == "__main__":
