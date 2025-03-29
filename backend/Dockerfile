@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM python:3.12-slim AS builder
+FROM --platform=amd64 python:3.12-slim AS builder
 
 RUN pip install --no-cache-dir uv
 
@@ -11,7 +11,7 @@ COPY uv.lock pyproject.toml ./
 RUN uv sync --frozen --no-cache
 
 # Stage 2: Runtime
-FROM python:3.12-slim AS runtime
+FROM --platform=amd64 python:3.12-slim AS runtime
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 # Copy the application into the container.
 COPY *.py ./
-COPY sample.pdf ./sample.pdf
+COPY *.pdf ./
 
 RUN python -m spacy download en_core_web_sm --target /app
 

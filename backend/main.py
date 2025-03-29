@@ -129,17 +129,8 @@ async def test():
 	responsetwo = embedder.embed_query("Hello asdsad")
 	return {"response": response, "responsetwo": responsetwo}
 
-
-@app.get("/")
-async def root():
-	# 1. Build KG and Store in Neo4j Database
-	kg_builder_pdf = SimpleKGPipeline(
-		llm=llm,
-		driver=neo4j_driver,
-		embedder=embedder,
-		from_pdf=True,
-	)
-	await kg_builder_pdf.run_async(file_path="sample.pdf")
+@app.get("/run")
+async def run():
 	create_vector_index(
 		neo4j_driver,
 		name="text_embeddings",
@@ -157,10 +148,25 @@ async def root():
 	rag = GraphRAG(llm=llm, retriever=vector_retriever)
 
 	# 4. Run
-	response = rag.search("List all companies bhasker worked in?")
+	response = rag.search("give me details on paypal financial domain. a brief overview")
 	print(response.answer)
+	return {"response": response.answer}
 
-	return {"pdf_text": response.answer}
+
+@app.get("/")
+async def root():
+	# 1. Build KG and Store in Neo4j Database
+	kg_builder_pdf = SimpleKGPipeline(
+		llm=llm,
+		driver=neo4j_driver,
+		embedder=embedder,
+		from_pdf=True,
+	)
+	await kg_builder_pdf.run_async(file_path="sampletwo.pdf")
+	
+
+	return {"response": "Data inserted into Neo4j"}
+
 
 
 # if __name__ == "__main__":
